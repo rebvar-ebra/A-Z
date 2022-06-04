@@ -1,11 +1,11 @@
-import React,{useEffect,useState} from 'react'
-import{ethers} from 'ethers'
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 
-import{contractABI,contractAddress} from '../utils/constant'
+import { contractABI, contractAddress } from "../utils/constant";
 
 export const TransactionContext = React.createContext();
 
-const {ethereum} = window;
+const { ethereum } = window;
 
 
 const getEthereumContract =() =>{
@@ -22,21 +22,23 @@ const getEthereumContract =() =>{
 }
 
 export const TransactionProvider =({children})=>{
-    const [currentAccount, setCurrentAccount] = useState();
-    const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" });
+    const [currentAccount, setCurrentAccount] = useState('');
+    const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
     const handleChange = (e, name) => {
-        setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+        setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
       };
 
     const checkifWalletIsConnected = async ()=>{
         try {
             if(!ethereum) return ("Please install metamask");
 
-        const accounts = await ethereum.request({method:'eth_accounts'});
-        if (accounts.length) {
+            const accounts = await ethereum.request({method:'eth_accounts'});
+            
+            if (accounts.length) {
+
             setCurrentAccount(accounts[0]);
 
-            //getAll Transaction
+            //getAll Transaction()
         }else{
             console.log('No accounts found');
 
@@ -67,7 +69,7 @@ export const TransactionProvider =({children})=>{
       };
     const sendTransaction = async()=>{
         try {
-            if (!ethereum) return alert("Please install MetaMask.");
+            if (!ethereum) return alert("Please install MetaMask");
             const { addressTo, amount, keyword, message } = formData;
             getEthereumContract();
 
@@ -85,7 +87,7 @@ export const TransactionProvider =({children})=>{
         
     },[])
     return(
-        <TransactionContext.Provider value={{connectWallet,currentAccount,formData,setformData,handleChange,sendTransaction}}>
+        <TransactionContext.Provider value={{connectWallet,currentAccount,formData,setFormData,handleChange,sendTransaction}}>
 
             {children}
 
